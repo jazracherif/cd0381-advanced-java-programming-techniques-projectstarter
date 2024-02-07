@@ -109,9 +109,6 @@ final class ParallelWebCrawler implements WebCrawler {
       // Create all parallel subtasks
       List<RecursiveTask<CrawlResult>> tasks = new ArrayList<>();
       for (String subLink: result.getLinks()) {
-        // todo: check whether we should visit this link or not
-
-
         tasks.add(new CrawlerRecursiveAction.builder()
                 .setUrl(subLink).setParserFactory(parserFactory)
                 .setParserFactory(parserFactory)

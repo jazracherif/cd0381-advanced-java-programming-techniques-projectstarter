@@ -38,7 +38,7 @@ public final class CrawlResultWriter {
     // This is here to get rid of the unused variable warning.
     Objects.requireNonNull(path);
 
-    try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE)) {
+    try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
       write(writer);
     } catch (Exception e){
       e.printStackTrace();
