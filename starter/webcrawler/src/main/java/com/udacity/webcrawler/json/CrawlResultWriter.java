@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,10 +59,10 @@ public final class CrawlResultWriter {
     jsonWriter.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
 
     try {
-      Map<String,?> output = Map.of(
-              "wordCounts", result.getWordCounts(),
-              "urlsVisited", result.getUrlsVisited()
-      );
+      Map<String,Object> output = new LinkedHashMap<>();
+      output.put("wordCounts", result.getWordCounts());
+      output.put("urlsVisited", result.getUrlsVisited());
+
       jsonWriter.writeValue(writer, output) ;
     } catch (Exception e){
       e.printStackTrace();
