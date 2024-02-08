@@ -63,7 +63,8 @@ public final class CrawlResultWriter {
       output.put("wordCounts", result.getWordCounts());
       output.put("urlsVisited", result.getUrlsVisited());
 
-      jsonWriter.writeValue(writer, output) ;
+      // Ensure json output is pretty printed
+      jsonWriter.writerWithDefaultPrettyPrinter().writeValue(writer, output) ;
     } catch (Exception e){
       e.printStackTrace();
     }

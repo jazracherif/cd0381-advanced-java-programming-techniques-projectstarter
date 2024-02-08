@@ -41,6 +41,7 @@ public final class WebCrawlerMain {
     if (config.getResultPath().isBlank()) {
       Writer out = new OutputStreamWriter(System.out);
       resultWriter.write(out);
+      out.write(System.lineSeparator());
       out.flush();
     }
     else
@@ -50,6 +51,7 @@ public final class WebCrawlerMain {
     if (config.getProfileOutputPath().isBlank()) {
       Writer out = new OutputStreamWriter(System.out);
       profiler.writeData(out);
+      out.write(System.lineSeparator());
       out.flush();
     }
     else
