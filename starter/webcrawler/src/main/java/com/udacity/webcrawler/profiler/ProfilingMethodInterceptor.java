@@ -28,33 +28,24 @@ final class ProfilingMethodInterceptor implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if (method.getDeclaringClass().equals(Object.class) ||
-            method.getAnnotation(Profiled.class) == null){
-      try {
-        return method.invoke(delegate, args);
-      } catch (InvocationTargetException e){
-        throw e.getTargetException();
-      } catch (IllegalAccessException e){
-        throw new RuntimeException(e);
-      }
-    }
+    Instant start = null;
+    boolean profiled = !method.getDeclaringClass().equals(Object.class) &&
+            method.getAnnotation(Profiled.class) != null;
 
-    Instant before = clock.instant();
-    Object result;
+    if (profiled)
+      start = clock.instant();
+
     try {
-      result = method.invoke(delegate, args);
-      this.state.record(delegate.getClass(), method, Duration.between(before, clock.instant()));
+      return method.invoke(delegate, args);
     } catch (InvocationTargetException e){
-      this.state.record(delegate.getClass(), method, Duration.between(before, clock.instant()));
       throw e.getTargetException();
     } catch (IllegalAccessException e){
-      this.state.record(delegate.getClass(), method, Duration.between(before, clock.instant()));
       throw new RuntimeException(e);
     } catch (UndeclaredThrowableException e){
-      this.state.record(delegate.getClass(), method, Duration.between(before, clock.instant()));
       throw e.getUndeclaredThrowable();
+    } finally {
+      if (profiled)
+        this.state.record(delegate.getClass(), method, Duration.between(start, clock.instant()));
     }
-
-    return result;
   }
 }
